@@ -1,0 +1,74 @@
+{
+	"info": {
+		"_postman_id": "7c484d93-03dc-47e1-a6a6-83124cab8a07",
+		"name": "bci-ivan-graciarena",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "20375956"
+	},
+	"item": [
+		{
+			"name": "Sign-up",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqaG9uZG9lQGdtYWlsLmNvbSIsImlkIjoiZjk2NWE5NTgtYzk0Mi00NjM4LWE1ODItOTgyNmM0OTViNzRjIiwibmFtZSI6Ikpob24iLCJwYXNzd29yZCI6IiQyYSQxMCR6eDJZM1RQOVBUcDJRY3VuMkRkMjllOHkuNG9XeURkUk1MUWJjdmx0dk5obHFoWGtSTDVTTyIsImV4cCI6MTkxNzI2MzQ0NH0.KPFE4aGl90ftNBTTfxEHDzDc7r-oDu-Z0Z5WwwmXvU4",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"name\": \"Ivan\",\r\n\t\"email\": \"mypersonal.email@gmail.com\",\r\n\t\"password\": \"SomeResis11\",\r\n\t\"phones\": [\r\n\t\t{\r\n\t\t\t\"number\": \"22355932991\",\r\n\t\t\t\"citycode\": \"7600\",\r\n\t\t\t\"countrycode\": \"MDQ\"\r\n\t\t}\r\n\t]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/sign-up",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"sign-up"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Log-in",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"email\":\"jhondoe@gmail.com\",\r\n\t\"password\":\"ExtremeProgramming11\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/log-in",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"log-in"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
