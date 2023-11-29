@@ -37,7 +37,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * @author ivan.graciarena
  * @project ivan-graciarena-bci-challenge
  */
-//@WebMvcTest(controllers = AuthController.class)
 @SpringBootTest
 @AutoConfigureMockMvc
 class AuthControllerTest {
