@@ -7,6 +7,8 @@
 
 ## Links
 - [Flow Diagram](https://drive.google.com/file/d/1kbKlYjT-H06_dYpPOwKfSzYlESHbEWAO/view?usp=sharing)
+- Component Diagram
+  - <img width="575" alt="image" src="https://github.com/IGraciarena/bci/assets/21971421/920d6aa3-30f2-4f59-8c53-b45db2e9cb76">
 - [Postman Collection](./collection)
 
 ## Configurations
