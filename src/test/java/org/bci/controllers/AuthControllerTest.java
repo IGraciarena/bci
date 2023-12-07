@@ -1,16 +1,9 @@
 package org.bci.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import org.bci.configurations.JwtUtil;
 import org.bci.dto.request.LoginRequest;
-import org.bci.repositories.UserRepository;
 import org.bci.service.UserService;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -18,12 +11,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-
-import javax.persistence.EntityManager;
-import java.nio.charset.StandardCharsets;
-import java.time.Instant;
-import java.time.ZoneId;
-import java.util.Date;
 
 import static org.bci.utils.AuthenticationTokenUtils.getBearerToken;
 import static org.bci.utils.EntityUtils.LOG_IN_REQUEST_STUB;
