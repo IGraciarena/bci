@@ -4,7 +4,6 @@ import org.bci.dto.response.UserCreateResponse;
 import org.bci.entities.UserEntity;
 import org.bci.models.User;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
 import java.time.Instant;
@@ -17,7 +16,7 @@ import java.time.Instant;
 public interface UserMapper {
     UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);
 
-    default UserCreateResponse map(UserEntity user, String token){
+    default UserCreateResponse map(UserEntity user, String token) {
         return UserCreateResponse.builder()
                 .id(user.getId())
                 .created(user.getCreated())
