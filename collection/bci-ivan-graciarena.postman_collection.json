@@ -10,14 +10,7 @@
 			"name": "Sign-up",
 			"request": {
 				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqaG9uZG9lQGdtYWlsLmNvbSIsImlkIjoiZjk2NWE5NTgtYzk0Mi00NjM4LWE1ODItOTgyNmM0OTViNzRjIiwibmFtZSI6Ikpob24iLCJwYXNzd29yZCI6IiQyYSQxMCR6eDJZM1RQOVBUcDJRY3VuMkRkMjllOHkuNG9XeURkUk1MUWJjdmx0dk5obHFoWGtSTDVTTyIsImV4cCI6MTkxNzI2MzQ0NH0.KPFE4aGl90ftNBTTfxEHDzDc7r-oDu-Z0Z5WwwmXvU4",
-							"type": "string"
-						}
-					]
+					"type": "noauth"
 				},
 				"method": "POST",
 				"header": [],
@@ -31,12 +24,13 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/sign-up",
+					"raw": "localhost:8080/api/sign-up",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
+						"api",
 						"sign-up"
 					]
 				}
@@ -51,7 +45,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJteXBlcnNvbmFsLmVtYWlsQGdtYWlsLmNvbSIsImlkIjoiMzM3ZjUyOGUtNWU2NC00ODEyLTg4MDktNTU1NmUzMDYzNjY3IiwibmFtZSI6Ikl2YW4iLCJwYXNzd29yZCI6IiQyYSQxMCRYanpWSXhtY0JxOFpxVWpGTDVqTE9lUnBoTW90amVxUUlZTS5US0ZNY0MxZFVMY0Q3Vjc1VyIsImV4cCI6MTcwMTgwNTMxN30.awLSfN-Y9fTkT_cmT6lGeBpx8ubdtrEEpv9_JLO_N8g",
 							"type": "string"
 						}
 					]
@@ -68,12 +62,13 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/log-in",
+					"raw": "localhost:8080/api/log-in",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
+						"api",
 						"log-in"
 					]
 				}

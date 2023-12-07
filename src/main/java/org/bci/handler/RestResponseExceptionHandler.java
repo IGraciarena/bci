@@ -1,5 +1,6 @@
 package org.bci.handler;
 
+import io.jsonwebtoken.ExpiredJwtException;
 import org.bci.exceptions.EntityNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,6 +27,15 @@ public class RestResponseExceptionHandler {
                 HttpStatus.NOT_FOUND.value(),
                 "Entity was not found");
         return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler({ExpiredJwtException.class})
+    public ResponseEntity<?> handleExpiredJwtException(ExpiredJwtException ex) {
+        GenericError errorResponse = new GenericError(
+                Instant.now(),
+                HttpStatus.UNAUTHORIZED.value(),
+                "JWT is expired.");
+        return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
     }
 
     @ExceptionHandler({UniqueEntityAlreadyExistsException.class})

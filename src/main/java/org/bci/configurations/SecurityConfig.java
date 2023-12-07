@@ -9,7 +9,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -26,6 +25,17 @@ public class SecurityConfig {
     private final UserDetailServiceImpl userDetailsService;
     private final JwtAuthorizationFilter jwtAuthorizationFilter;
 
+    private static final String[] AUTH_WHITELIST = {
+            // -- swagger ui
+            "/v2/api-docs",
+            "/swagger-resources",
+            "/swagger-resources/**",
+            "/configuration/ui",
+            "/configuration/security",
+            "/swagger-ui.html",
+            "/webjars/**"
+            // other public endpoints of your API may be appended to this array
+    };
 
     public SecurityConfig(UserDetailServiceImpl userDetailsService, JwtAuthorizationFilter jwtAuthorizationFilter) {
         this.userDetailsService = userDetailsService;
@@ -49,11 +59,12 @@ public class SecurityConfig {
         http
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers(HttpMethod.POST, "/sign-up").permitAll()
-                .antMatchers(HttpMethod.POST, "/login").permitAll()
+                .antMatchers(HttpMethod.POST, "/api/sign-up").permitAll()
+                .antMatchers(HttpMethod.POST, "/api/login").authenticated()
+                .antMatchers(AUTH_WHITELIST).permitAll()
                 .anyRequest().authenticated()
                 .and()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .httpBasic()
                 .and()
                 .addFilterBefore(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class);
 

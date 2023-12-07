@@ -1,8 +1,7 @@
 package org.bci.configurations;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Claims;
-import org.springframework.context.annotation.Profile;
+import org.bci.service.impl.UserDetailServiceImpl;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -24,34 +23,36 @@ import java.util.ArrayList;
 public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
     private final JwtUtil jwtUtil;
-    private final ObjectMapper mapper;
+    private final UserDetailServiceImpl userDetailService;
 
-    public JwtAuthorizationFilter(JwtUtil jwtUtil, ObjectMapper mapper) {
+    public JwtAuthorizationFilter(JwtUtil jwtUtil,
+                                  UserDetailServiceImpl userDetailService) {
         this.jwtUtil = jwtUtil;
-        this.mapper = mapper;
+        this.userDetailService = userDetailService;
     }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
+
         var accessToken = jwtUtil.resolveToken(request);
         if (accessToken == null) {
             filterChain.doFilter(request, response);
             return;
         }
         Claims claims = jwtUtil.resolveClaims(request);
-
-        if (claims != null & jwtUtil.validateClaims(claims)) {
-            Authentication authentication = new UsernamePasswordAuthenticationToken(
-                    claims.getSubject(), claims.get("password"),
-                    new ArrayList<>()
-            );
-
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+        if (claims != null) {
+            var user = userDetailService.loadUserByUsername(jwtUtil.getUsername(accessToken));
+            if (jwtUtil.validateToken(accessToken, user)) {
+                Authentication authentication = new UsernamePasswordAuthenticationToken(
+                        claims.getSubject(),
+                        claims.get("password"),
+                        new ArrayList<>()
+                );
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+            }
         }
-
-
         filterChain.doFilter(request, response);
     }
 }

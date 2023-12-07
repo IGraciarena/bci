@@ -1,18 +1,14 @@
 package org.bci.configurations;
 
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
 import org.bci.models.User;
-import org.springframework.context.annotation.Profile;
-import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import static io.jsonwebtoken.SignatureAlgorithm.HS256;
 
@@ -25,7 +21,7 @@ public class JwtUtil {
 
     private final JwtParser jwtParser;
     private final String SECRET_KEY = "mysecretkey";
-    private final long TOKEN_EXPIRATION = 60 * 60 * 1000;
+    private final long TOKEN_EXPIRATION = 60000; //60 * 60 * 1000; // 1 hour
     private final String TOKEN_HEADER = "Authorization";
     private final String TOKEN_PREFIX = "Bearer ";
 
@@ -40,8 +36,7 @@ public class JwtUtil {
         claims.put("password", user.getPassword());
 
         Date tokenCreateTime = new Date();
-        Date tokenValidity = new Date(tokenCreateTime.getTime() +
-                TimeUnit.MINUTES.toMillis(TOKEN_EXPIRATION));
+        Date tokenValidity = new Date(tokenCreateTime.getTime() + TOKEN_EXPIRATION);
 
         return Jwts.builder()
                 .setClaims(claims)
@@ -54,24 +49,7 @@ public class JwtUtil {
         return jwtParser.parseClaimsJws(token).getBody();
     }
 
-    public Claims resolveClaims(HttpServletRequest req) {
-        try {
-            var token = resolveToken(req);
-            if (token != null) {
-                return parseJwtClaims(token);
-            }
-            return null;
-        } catch (ExpiredJwtException ex) {
-            req.setAttribute("expired", ex.getMessage());
-            throw ex;
-        } catch (Exception ex) {
-            req.setAttribute("invalid", ex.getMessage());
-            throw ex;
-        }
-    }
-
     public String resolveToken(HttpServletRequest request) {
-
         var bearerToken = request.getHeader(TOKEN_HEADER);
         if (bearerToken != null && bearerToken.startsWith(TOKEN_PREFIX)) {
             return bearerToken.substring(TOKEN_PREFIX.length());
@@ -79,15 +57,25 @@ public class JwtUtil {
         return null;
     }
 
-    public boolean validateClaims(Claims claims) throws AuthenticationException {
-        try {
-            return claims.getExpiration().after(new Date());
-        } catch (Exception e) {
-            throw e;
+    public Claims resolveClaims(HttpServletRequest req) {
+        var token = resolveToken(req);
+        if (token != null) {
+            return parseJwtClaims(token);
         }
+        return null;
     }
 
-    public String getEmail(Claims claims) {
-        return claims.getSubject();
+    private boolean validateClaims(String token) {
+        final Date expiration = parseJwtClaims(token).getExpiration();
+        return expiration.after(new Date());
+    }
+
+    public String getUsername(String token) {
+        return parseJwtClaims(token).getSubject();
+    }
+
+    public boolean validateToken(String token, UserDetails userDetails) {
+        final String username = getUsername(token);
+        return (username.equals(userDetails.getUsername()) && validateClaims(token));
     }
 }

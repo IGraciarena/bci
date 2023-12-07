@@ -5,7 +5,9 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.bci.configurations.JwtUtil;
 import org.bci.dto.request.LoginRequest;
+import org.bci.repositories.UserRepository;
 import org.bci.service.UserService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -17,6 +19,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import javax.persistence.EntityManager;
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.time.ZoneId;
@@ -55,21 +58,21 @@ class AuthControllerTest {
                 .email(USER_ENTITY_STUB.getEmail())
                 .password(USER_ENTITY_STUB.getPassword()).build();
 
-        this.mockMvc.perform(post("/sign-up")
+        this.mockMvc.perform(post("/api/sign-up")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(asJsonString(request)))
                 .andExpect(status().isCreated());
     }
 
     @Test
-    @Disabled
     void logIn() throws Exception {
-        when(userService.logIn(LOG_IN_REQUEST_STUB)).thenReturn(LOG_IN_RESPONSE_STUB);
+        when(userService.logIn(LOG_IN_REQUEST_STUB))
+                .thenReturn(LOG_IN_RESPONSE_STUB);
         var request = LoginRequest.builder()
                 .email(USER_ENTITY_STUB.getEmail())
                 .password(USER_ENTITY_STUB.getPassword())
                 .build();
-        this.mockMvc.perform(post("/login")
+        this.mockMvc.perform(post("/api/log-in")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(asJsonString(request))
                         .header(HttpHeaders.AUTHORIZATION, "Bearer " + getBearerToken()))
@@ -84,5 +87,4 @@ class AuthControllerTest {
             throw new RuntimeException(e);
         }
     }
-
 }
